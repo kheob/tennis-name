@@ -27,9 +27,17 @@ export function pointsToScore(points: Points): number {
 export class Game {
   player1Score: Points = Points.LOVE;
   player2Score: Points = Points.LOVE;
+  private winner?: "player1" | "player2";
 
-  // returns false if game is still going, true if game is over
-  awardPoint(player: "player1" | "player2"): boolean {
+  getWinner() {
+    return this.winner;
+  }
+
+  awardPoint(player: "player1" | "player2") {
+    if (this.winner) {
+      throw Error("game is already over");
+    }
+
     switch (player) {
       case "player1":
         this.player1Score++;
@@ -39,28 +47,18 @@ export class Game {
         break;
     }
 
-    // either player win
-    if (
+    const eitherPlayerWin =
       this.player1Score === Points.ADVANTAGE_WIN ||
-      this.player2Score === Points.ADVANTAGE_WIN
-    ) {
-      return true;
-    }
-
-    // player 1 win
-    if (
+      this.player2Score === Points.ADVANTAGE_WIN;
+    const player1Win =
       this.player1Score === Points.ADVANTAGE &&
-      this.player2Score !== Points.FORTY
-    ) {
-      return true;
-    }
-
-    // player 2 win
-    if (
+      this.player2Score !== Points.FORTY;
+    const player2Win =
       this.player2Score === Points.ADVANTAGE &&
-      this.player1Score !== Points.FORTY
-    ) {
-      return true;
+      this.player1Score !== Points.FORTY;
+
+    if (eitherPlayerWin || player1Win || player2Win) {
+      this.winner = player;
     }
 
     // if both advantage, set to 40-40
@@ -71,8 +69,6 @@ export class Game {
       this.player1Score = Points.FORTY;
       this.player2Score = Points.FORTY;
     }
-
-    return false;
   }
 
   score() {

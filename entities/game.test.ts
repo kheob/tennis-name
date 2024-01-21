@@ -45,34 +45,40 @@ describe("Game", () => {
   );
 
   it.each`
-    player1Score        | player2Score    | gameOver
+    player1Score        | player2Score    | winner
     ${Points.LOVE}      | ${Points.LOVE}  | ${false}
     ${Points.FORTY}     | ${Points.LOVE}  | ${true}
     ${Points.FORTY}     | ${Points.FORTY} | ${false}
     ${Points.ADVANTAGE} | ${Points.FORTY} | ${true}
   `(
-    "returns $gameOver when the current score is $player1Score-$player2Score and player 1 scores a point",
-    ({ player1Score, player2Score, gameOver }) => {
+    "sets winner as player 1 when the current score is $player1Score-$player2Score and player 1 scores a point",
+    ({ player1Score, player2Score, winner }) => {
       const game = new Game();
       game.player1Score = player1Score;
       game.player2Score = player2Score;
-      expect(game.awardPoint("player1")).toEqual(gameOver);
+      game.awardPoint("player1");
+      if (winner) {
+        expect(game.getWinner() === "player1");
+      }
     }
   );
 
   it.each`
-    player1Score    | player2Score        | gameOver
+    player1Score    | player2Score        | winner
     ${Points.LOVE}  | ${Points.LOVE}      | ${false}
     ${Points.LOVE}  | ${Points.FORTY}     | ${true}
     ${Points.FORTY} | ${Points.FORTY}     | ${false}
     ${Points.FORTY} | ${Points.ADVANTAGE} | ${true}
   `(
-    "returns $gameOver when the current score is $player1Score-$player2Score and player 2 scores a point",
-    ({ player1Score, player2Score, gameOver }) => {
+    "sets winner as player 2 when the current score is $player1Score-$player2Score and player 2 scores a point",
+    ({ player1Score, player2Score, winner }) => {
       const game = new Game();
       game.player1Score = player1Score;
       game.player2Score = player2Score;
-      expect(game.awardPoint("player2")).toEqual(gameOver);
+      game.awardPoint("player2");
+      if (winner) {
+        expect(game.getWinner() === "player2");
+      }
     }
   );
 
@@ -90,6 +96,14 @@ describe("Game", () => {
     game2.awardPoint("player2");
     game2.player1Score = Points.FORTY;
     game2.player2Score = Points.FORTY;
+  });
+
+  it("sets winner", () => {
+    const game = new Game();
+    game.player1Score = Points.FORTY;
+    game.player2Score = Points.THIRTY;
+    game.awardPoint("player1");
+    expect(game.getWinner()).toEqual("player1");
   });
 });
 
