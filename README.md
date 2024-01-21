@@ -11,6 +11,8 @@
 `npm test`
 
 ## Constraints and assumptions
+- Unique player names
 
 ## Future improvements
 - Compile to JavaScript
+- Add validation
