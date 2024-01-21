@@ -1,5 +1,6 @@
 import { Game, Points } from "./game";
 import { Player } from "./player";
+import { TieBreakGame } from "./tiebreakgame";
 
 const GAMES_TO_WIN = 6;
 const GAMES_TO_WIN_BY = 2;
@@ -47,11 +48,27 @@ export class Match {
   }
 
   private startNewGame() {
-    this.games.push(new Game());
+    // check if tie break required
+    if (
+      this.gamesWon.player1 === GAMES_TO_WIN &&
+      this.gamesWon.player2 === GAMES_TO_WIN
+    ) {
+      this.games.push(new TieBreakGame());
+    } else {
+      this.games.push(new Game());
+    }
   }
 
   private isMatchOver(): boolean {
     const { player1: p1Wins, player2: p2Wins } = this.gamesWon;
+
+    // if 6-7 or 7-6, a tie break win
+    if (
+      (p1Wins === GAMES_TO_WIN && p2Wins === GAMES_TO_WIN + 1) ||
+      (p2Wins === GAMES_TO_WIN && p1Wins === GAMES_TO_WIN + 1)
+    ) {
+      return true;
+    }
 
     // either player wins with > 6 games and a different of > 2 games
     if (
@@ -78,6 +95,10 @@ export class Match {
 
   score() {
     let scoreString = `${this.gamesWon.player1}-${this.gamesWon.player2}`;
+
+    if (this.isMatchOver()) {
+      return scoreString;
+    }
 
     const currentGame = this.getCurrentGame();
     if (

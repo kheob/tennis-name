@@ -14,7 +14,6 @@ This is a tennis game that handles basic scoring of a tennis match.
 ## Constraints and assumptions
 - Unique player names
 - Only one set per match
-- No tie breaks
 - Time boxed to four hours
 
 ## Future improvements
@@ -22,4 +21,3 @@ This is a tennis game that handles basic scoring of a tennis match.
 - Add validation
 - Create a separate class for sets
 - Better way to mock data for tests
-- Implement tie break

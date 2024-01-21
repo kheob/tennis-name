@@ -1,7 +1,9 @@
 import { Match } from "./match";
+import { TieBreakGame } from "./tiebreakgame";
 
 const POINTS_TO_WIN_GAME = 4;
 const GAMES_TO_WIN_MATCH = 6;
+const POINTS_TO_WIN_TIE_BREAK = 7;
 
 describe("Match", () => {
   it("errors on same player name", () => {
@@ -53,6 +55,37 @@ describe("Match", () => {
       match.pointWonBy(player);
     }
     expect(match.games).toHaveLength(2);
+  });
+
+  it("starts a tie break game if the game score is 6-6", () => {
+    const match = new Match("player 1", "player 2");
+    for (let j = 0; j < GAMES_TO_WIN_MATCH; j++) {
+      for (let i = 0; i < POINTS_TO_WIN_GAME; i++) {
+        match.pointWonBy("player 1");
+      }
+      for (let i = 0; i < POINTS_TO_WIN_GAME; i++) {
+        match.pointWonBy("player 2");
+      }
+    }
+    match.pointWonBy("player 1");
+    expect(match.games).toHaveLength(13);
+    expect(match.games[12]).toBeInstanceOf(TieBreakGame);
+  });
+
+  it("finishes the game at 7-6 if a tie break is won", () => {
+    const match = new Match("player 1", "player 2");
+    for (let j = 0; j < GAMES_TO_WIN_MATCH; j++) {
+      for (let i = 0; i < POINTS_TO_WIN_GAME; i++) {
+        match.pointWonBy("player 1");
+      }
+      for (let i = 0; i < POINTS_TO_WIN_GAME; i++) {
+        match.pointWonBy("player 2");
+      }
+    }
+    for (let i = 0; i < POINTS_TO_WIN_TIE_BREAK; i++) {
+      match.pointWonBy("player 1");
+    }
+    expect(match.score()).toEqual("7-6");
   });
 
   it.each`

@@ -27,7 +27,7 @@ export function pointsToScore(points: Points): number {
 export class Game {
   player1Score: Points = Points.LOVE;
   player2Score: Points = Points.LOVE;
-  private winner?: "player1" | "player2";
+  protected winner?: "player1" | "player2";
 
   getWinner() {
     return this.winner;
