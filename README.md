@@ -16,3 +16,5 @@
 ## Future improvements
 - Compile to JavaScript
 - Add validation
+- Create a separate class for sets
+- Better way to mock data for tests
