@@ -63,7 +63,7 @@ export class Game {
 
     // if both advantage, set to 40-40
     if (
-      this.player1Score === Points.ADVANTAGE ||
+      this.player1Score === Points.ADVANTAGE &&
       this.player2Score === Points.ADVANTAGE
     ) {
       this.player1Score = Points.FORTY;
